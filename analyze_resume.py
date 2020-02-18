@@ -5,10 +5,11 @@ import sys
 from datetime import datetime
 import requests
 import shutil  
-
+import re
 
 import argparse
 
+from ast import literal_eval
 #used only for google drive pdfs
 import imagetotext as im2text
 
@@ -71,8 +72,10 @@ def main( fileSavingDirectory ,directory , filetype='pdf', ocr=False):
 
     conversion_candidates = dict()
     count = 0
-    other_filetype_counter = 0   
-        
+    other_filetype_counter = 0
+    
+    
+    
     #Creates csv file in csv folder with the name of Engineer and skill set
     with open(os.path.join(fileSavingDirectory,new_skill_list_filename), 'a', encoding='utf-8', newline='') as csv_data_file:
         writer = csv.writer(csv_data_file)
@@ -99,21 +102,23 @@ def main( fileSavingDirectory ,directory , filetype='pdf', ocr=False):
 
                     #passes the text file to compare and search for the skills
 
-                    skills_retrieved = match_skill_category(text)
+                    skills_retrieved = match_skill_category(fileSavingDirectory,text)
 
                     #Another method for extracting skills using textract
                     if len(skills_retrieved) == 0:
                         print("No Skills Found.Trying PYPDF for", filename)
                         engineer, text = extract_text_from_pdf(filename)
-                        skills_retrieved = match_skill_category(text)
+                        skills_retrieved = match_skill_category(fileSavingDirectory,text)
 
                     if len(skills_retrieved) == 0:
                         print("No Skills Found.Trying Textract Explicitly for ", filename)
                         engineer, text = extract_text_from_pdf(filename, 1)
-                        skills_retrieved = match_skill_category(text)
+                        skills_retrieved = match_skill_category(fileSavingDirectory,text)
 
                     print(engineer)                 
-             
+                    
+
+                    
 
 
                 except TypeError as e:
@@ -131,14 +136,15 @@ def main( fileSavingDirectory ,directory , filetype='pdf', ocr=False):
                 print("JSON file.")
                 engineer = extract_developer_name(filename)
                 text = extract_text_from_json(filename)
-                skills_retrieved = match_skill_category(text)
+                skills_retrieved = match_skill_category(fileSavingDirectory,text)
+            
             else:
             # If resume are of other format
                 print("File name with other extension", filename)
                 other_filetype_counter = other_filetype_counter + 1
                 continue
 
-             #Cleaning the name
+            #Cleaning the name
 
             specials = '-"/._()'
             trans = str.maketrans(specials, ' '*len(specials))
@@ -147,8 +153,8 @@ def main( fileSavingDirectory ,directory , filetype='pdf', ocr=False):
             engineer=engineer.upper()
             engineer=re.sub('RESUME', '', engineer)
             engineer=engineer.title()
-            
-            writer.writerow([engineer,  skills_retrieved])
+
+            writer.writerow([engineer, skills_retrieved  ] )
         
 
             #Note: This code returns advanced level for all and returns 30 years of experience
@@ -169,7 +175,7 @@ def main( fileSavingDirectory ,directory , filetype='pdf', ocr=False):
             concat_and_save_images(pil_images, devname)
         im2text.process_directory(os.getcwd())
         main(os.getcwd(), 'json')
-
+    
     if os.path.isdir(os.path.join(fileSavingDirectory,'csv_files')):
         print("csv_files directory exists")
     else:
@@ -177,18 +183,16 @@ def main( fileSavingDirectory ,directory , filetype='pdf', ocr=False):
     #Changing the directory of csv
     shutil.move(os.path.join(fileSavingDirectory,new_skill_list_filename), os.path.join(fileSavingDirectory,'csv_files'))
 
+    
+
     #number of resume that were parsed    
     print("Resumes processed:-", count)
     #number of files that could not be parsed 
     print("Other Format Files:-", other_filetype_counter)
 
 
-
-
-
-
 if __name__ == '__main__':
-
+    
     TARGET_DIRECTORY = args["directory"]
     
     TARGET_DIRECTORY_MAIN=os.getcwd()

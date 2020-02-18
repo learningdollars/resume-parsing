@@ -1,5 +1,6 @@
 import pandas as pd
 
+import os
 #changing txt file to csv file
 
 # writing data to a new file changing the first delimiter only
