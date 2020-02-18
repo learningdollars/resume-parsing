@@ -3,6 +3,8 @@ import pandas as pd
 import os
 import csv
 
+from ast import literal_eval
+
 #dataframe with record of resume skills
 colnames=["ENGINEER",'SKILLS']
 df_resume=pd.read_csv("./csv_files/engineerlist_2020_02_15_03_49_17_PM.csv",names=colnames,header=None)
@@ -37,21 +39,82 @@ with open(os.path.join("./csv_files","Resume_ld_skills.csv"), 'w', encoding='utf
     writer.writerow(["Name","Skills_Resume","Skills_ld"])
 
     for item_LD in df_LD["LDTALENTS"].tolist():
-
+            
         for item_resume in df_resume["ENGINEER"].tolist(): 
             if item_LD.upper() in item_resume.upper():
                 try:
                     name_ld=item_LD
                     skills_resume=df_resume_2.loc[item_resume]["SKILLS"]
-                    skills_ld=df_LD_2.loc[item_LD]["Skills"]
-                    writer.writerow([name_ld,skills_resume,skills_ld])
-                except:
-                    print("Not Found")               
+                    skills_ld=df_LD_2.loc[item_LD]["SKILLS"]
 
+                    count=0
+                        for i in range(0,len(skills_resume)):
+                                
+                            if skills_resume[i].upper() in skills_ld.upper():
+                                count=count+1
+                        if len(skills_resume) > 20:
+                            if count > 8:
+                                writer.writerow([name_ld,skills_resume,skills_ld])
+                            else:
+                                print("Common name abort")
+
+                        elif len(skills_resume) > 15:                           
+                            if count > 6:
+                                writer.writerow([name_ld,skills_resume,skills_ld])
+                            else:
+                                print("Common name abort")
+                        else:
+                            if count > 4:
+                                writer.writerow([name_ld,skills_resume,skills_ld])
+                            else:
+                                print("Common name abort")
+                except:
+                        print("Not Found")                                              
+                    
                 break
 
             elif item_LD.split(' ')[0].upper() in item_resume.upper():
-                writer.writerow([name_ld,skills_resume,skills_ld])
-                                
 
-                break
+                if len(item_LD.split(' ')[0].upper())<4:
+                    print("Not Found")
+                    break             
+                else:
+                    try:
+                            
+                        name_ld=item_LD
+                        skills_resume=df_resume_2.loc[item_resume]["SKILLS"]
+                        skills_ld=df_LD_2.loc[item_LD]["SKILLS"]
+                        skills_resume=literal_eval(skills_resume)
+                            #To minimize the error in merging duw to common name
+                        count=0
+                        for i in range(0,len(skills_resume)):
+                                
+                            if skills_resume[i].upper() in skills_ld.upper():
+                                count=count+1
+                        if len(skills_resume) > 20:
+                            if count > 8:
+                                writer.writerow([name_ld,skills_resume,skills_ld])
+                            else:
+                                print("Common name abort")
+
+                        elif len(skills_resume) > 15:                           
+                            if count > 6:
+                                writer.writerow([name_ld,skills_resume,skills_ld])
+                            else:
+                                print("Common name abort")
+                        else:
+                            if count > 4:
+                                writer.writerow([name_ld,skills_resume,skills_ld])
+                            else:
+                                print("Common name abort")
+                            
+                    except:
+                        print("Not Found")                   
+                        
+                    break
+
+
+
+
+
+
