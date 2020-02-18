@@ -4,7 +4,7 @@
 
 import re
 
-#listing all the scripts
+#listing all the skills
 
 Software_Engineering = [
     "C\+\+",
