@@ -5,7 +5,7 @@ import os
 import time
 from io import StringIO
 from os import path
-
+import re
 
 
 import PyPDF2
@@ -19,7 +19,8 @@ from pdfminer.converter import TextConverter
 from pdfminer.layout import LAParams
 from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
 from pdfminer.pdfpage import PDFPage
-
+import spacy
+from spacy.matcher import Matcher
 
 #This functions takes pdf and returns it is text format
 
@@ -57,7 +58,7 @@ def convert_pdf_to_txt(path):
 
 def extract_text_from_pdf(filename, call_textract=0):
     egineer_name = extract_developer_name(filename)
-    
+
     text = ""
 
     try:
@@ -92,8 +93,8 @@ def extract_text_from_pdf(filename, call_textract=0):
                     text = text
                     print("PDF Processed using PYPDF2 Sucessfully")
                     print(text.strip())
-                
-                   
+
+
                 # If the above returns as False, we run the OCR library textract to #convert scanned/image based PDF files into text
                 else:
                     print("Using textract since PyPDF2 raised error/exception")
@@ -101,7 +102,7 @@ def extract_text_from_pdf(filename, call_textract=0):
                     print(text.strip())
 
     #Printing out the errors
-                  
+
     except PdfReadWarning:
         print(PdfReadWarning, filename)
         print("PDF READ WARNING CAUGHT..")
@@ -118,7 +119,7 @@ def extract_text_from_pdf(filename, call_textract=0):
     else:
         print("Things went smoothly!")
 
-    
+
 
     return egineer_name,   text
 
@@ -272,3 +273,25 @@ def download_gdrive_files(file_name):
 
 
 
+
+# To find the name from resume
+
+# # load pre-trained model
+# nlp = spacy.load('en_core_web_sm')
+
+# # initialize matcher with a vocab
+# matcher_name = Matcher(nlp.vocab)
+
+# def extract_name(resume_text):
+#     nlp_text = nlp(resume_text)
+
+#     # First name and Last name are always Proper Nouns
+#     pattern = [{'POS': 'PROPN'}, {'POS': 'PROPN'}]
+
+#     matcher_name.add('NAME', None, *pattern)
+
+#     matches = matcher_name(nlp_text)
+
+#     for match_id, start, end in matches:
+#         span = nlp_text[start:end]
+#         return span.text

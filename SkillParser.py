@@ -427,32 +427,31 @@ def match_skill_category(filetext):
         if (match_individual_skill(k, filetext)):
             Web_Mobile_and_Desktop_Application_Development_Lst.append(k)
             combined_skill_list.append(k)
-            skills[
-                'Web_Mobile_and_Desktop_Application_Development'] = Web_Mobile_and_Desktop_Application_Development_Lst;
+            skills['Web_Mobile_and_Desktop_Application_Development'] = Web_Mobile_and_Desktop_Application_Development_Lst
 
     for l in Artificial_Intelligence:
         if match_individual_skill(l, filetext):
             Artificial_Intelligence_Lst.append(l)
             combined_skill_list.append(l)
-            skills['Artificial_Intelligence'] = Artificial_Intelligence_Lst;
+            skills['Artificial_Intelligence'] = Artificial_Intelligence_Lst
 
     for m in Special_Technologies_and_Expertise_Areas:
         if match_individual_skill(m, filetext):
             Special_Technologies_and_Expertise_Areas_Lst.append(m)
             combined_skill_list.append(m)
-            skills['Special_Technologies_and_Expertise_Areas'] = Special_Technologies_and_Expertise_Areas_Lst;
+            skills['Special_Technologies_and_Expertise_Areas'] = Special_Technologies_and_Expertise_Areas_Lst
 
     for p in APIs_and_Packages:
         if match_individual_skill(p, filetext):
             APIs_and_Packages_Lst.append(p)
             combined_skill_list.append(p)
-            skills['APIs_and_Packages'] = APIs_and_Packages_Lst;
+            skills['APIs_and_Packages'] = APIs_and_Packages_Lst
 
     for q in Other_Skills:
         if match_individual_skill(q, filetext):
             Other_Skills_Lst.append(q)
             combined_skill_list.append(q)
-            skills['Other_Skills'] = Other_Skills_Lst;
+            skills['Other_Skills'] = Other_Skills_Lst
 
     # print("skills ", skills)
     print("combined_skill_list", combined_skill_list)

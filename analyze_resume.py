@@ -138,6 +138,15 @@ def main( fileSavingDirectory ,directory , filetype='pdf', ocr=False):
                 other_filetype_counter = other_filetype_counter + 1
                 continue
 
+             #Cleaning the name
+
+            specials = '-"/._()'
+            trans = str.maketrans(specials, ' '*len(specials))
+            engineer = engineer.translate(trans)
+            engineer=re.sub('[^A-Za-z\s]+', '', engineer)
+            engineer=engineer.upper()
+            engineer=re.sub('RESUME', '', engineer)
+            engineer=engineer.title()
             
             writer.writerow([engineer,  skills_retrieved])
         
