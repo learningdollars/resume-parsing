@@ -1,4 +1,10 @@
+'''
+    This script is used to extract skills from the resume
+'''
+
 import re
+
+#listing all the scripts
 
 Software_Engineering = [
     "C\+\+",
@@ -355,47 +361,33 @@ Other_Skills = [
     "Cocoon"
 ]
 
+#function to compare and match all the skills
 
 def match_individual_skill(skill_to_match, filetext):
-
 
     skill_to_check = r"(" + skill_to_match + ")"
     print("skill_to_check", skill_to_match, "-->", len(skill_to_match))
 
     regex = skill_to_check
 
-
-    test_str = ("Skill Tags: Keras,TensorFlow, Numpy,Javascript, Python, Nodejs, socket.io, websockets,\n"
-                "Core Java,JSP/Servlet, Google Dialogflow, Android(native-android studio),\n"
-                "Kotlin,Swift, Google MAP API, Facebook API, JavaFX, REST API, HTML,Unix,CSS, SQL,XML, TIBCO EMC Documentum,jQuery\n\n"
-                "Skills used: Python, NodeJS, JavaScript, socket.io, websockets, Java, Android(native ),\n"
-                "Servlet, HTML, NodeJS, Socket.io, jQuery, HTML, CSS, Google MAP API, Facebook API\n\n"
-                "Skills used: Core Java, EJB, J2EE\n\n"
-                "Skills used: JavaScript,Java,JSP,Servlet,Dojo,jQuery,EMC Documentum,TIBCO\n"
-                "EAI,EMS\n\n"
-                "Skills used: Java, JSP, Servlet, SQL, HTML, CSS, JavaScript")
-
-
-
-
     if len(skill_to_match) <= 5:
         regex = r"[\s\,]" + skill_to_match + "[\s\,]"
-        #regex = r"\b" + skill_to_match + "\b"
 
-    #    matches = re.finditer(regex, filetext, re.MULTILINE | re.IGNORECASE)
+    #Finditer returns an iterator over all matches in the text
 
-    # if (len(skill_to_match)>1 and  len(skill_to_match)<= 3) :
-    # matches = re.finditer(regex, filetext, re.MULTILINE)
-    # else :
     if skill_to_match == 'C' or skill_to_match == 'R':
         matches = re.finditer(regex, filetext, re.MULTILINE)
     else:
         matches = re.finditer(regex, filetext, re.MULTILINE | re.IGNORECASE)
-    #print(len(matches))
+    
     count = 0
 
+
+    # Iterates over the "matches" iterator 
     for matchNum, match in enumerate(matches, start=1):
         count = count + 1
+
+        #To print where the match was found in text file and number of matches found in that particular group
 
         print("Match {matchNum} was found at {start}-{end}: {match}".format(matchNum=matchNum, start=match.start(),
                                                                             end=match.end(), match=match.group()))
@@ -412,6 +404,7 @@ def match_individual_skill(skill_to_match, filetext):
         return True
     return False
 
+#function to iterate over all the skills category
 def match_skill_category(filetext):
     skills = dict()
 

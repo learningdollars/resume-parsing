@@ -6,6 +6,8 @@ import time
 from io import StringIO
 from os import path
 
+
+
 import PyPDF2
 import objectpath
 import pdf2image
@@ -18,6 +20,8 @@ from pdfminer.layout import LAParams
 from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
 from pdfminer.pdfpage import PDFPage
 
+
+#This functions takes pdf and returns it is text format
 
 def convert_pdf_to_txt(path):
     rsrcmgr = PDFResourceManager()
@@ -41,25 +45,34 @@ def convert_pdf_to_txt(path):
     fp.close()
     device.close()
     retstr.close()
-    engineer_name = extract_developer_name(path)
-    return engineer_name, text
 
+    # This extracts the name of the pdf    
+    engineer_name = extract_developer_name(path)
+
+
+    return engineer_name,  text
+
+
+#to extract text from resume using OCR library textract or PyPDF2
 
 def extract_text_from_pdf(filename, call_textract=0):
     egineer_name = extract_developer_name(filename)
+    
     text = ""
 
     try:
+        #When extracting with textract 
         if call_textract > 0:
             text = textract.process(filename, method='tesseract', language='eng', encoding="utf-8")
             return egineer_name, text
 
+        #When extracting with PyPDF2
         with open(str(filename), 'rb') as f:
 
             pdfReader = PyPDF2.PdfFileReader(f)
             print("Encrypted-", pdfReader.isEncrypted)
-            # discerning the number of pages will allow us to parse through all #the pages
 
+            # discerning the number of pages will allow us to parse through all #the pages
             num_pages = pdfReader.numPages
             page_count = 0
 
@@ -79,11 +92,16 @@ def extract_text_from_pdf(filename, call_textract=0):
                     text = text
                     print("PDF Processed using PYPDF2 Sucessfully")
                     print(text.strip())
+                
+                   
                 # If the above returns as False, we run the OCR library textract to #convert scanned/image based PDF files into text
                 else:
                     print("Using textract since PyPDF2 raised error/exception")
                     text = text + textract.process(filename, method='tesseract', language='eng', encoding="utf-8")
                     print(text.strip())
+
+    #Printing out the errors
+                  
     except PdfReadWarning:
         print(PdfReadWarning, filename)
         print("PDF READ WARNING CAUGHT..")
@@ -100,7 +118,9 @@ def extract_text_from_pdf(filename, call_textract=0):
     else:
         print("Things went smoothly!")
 
-    return egineer_name, text
+    
+
+    return egineer_name,   text
 
 
 def pdf_2_pil_images(pdf_file_path, op_folder):
@@ -146,7 +166,7 @@ def concat_and_save_images(pil_images, devname):
     dst.save(new_filename)
     return new_filename
 
-
+# This extracts text from json format returned by google api call
 def extract_text_from_json(filename):
     encoding = 'utf-8'
     errors = 'strict'
@@ -187,6 +207,7 @@ USERPWD = None
 USE_CROPBOX = False
 STRICT = False
 
+#This returns the file name without Extension
 
 def extract_developer_name(filename):
     # src = pathlib.Path(filename).resolve()
@@ -195,10 +216,10 @@ def extract_developer_name(filename):
 
     fname, fextension = os.path.splitext(fname_w_extn)
 
-    # print(fextension)
-    # print(fname)
+
     return fname
 
+# Using google api to get the pdf from google documents
 
 def download_gdoc_in_pdf(fileId, file_name, location = '', chunk_size=2000):
     if location == '':
@@ -248,4 +269,6 @@ def download_gdrive_files(file_name):
             file_name_retrived = get_file_name(path_list[-1].rstrip('\n'))
             if file_name_retrived != '':
                 download_gdoc_in_pdf(path_list[-1], file_name_retrived)
+
+
 

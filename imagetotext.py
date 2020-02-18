@@ -47,14 +47,12 @@ def detectTextBase64(uri):
 
 
 def extractDeveloperName(filename):
-    # src = pathlib.Path(filename).resolve()
-
+    
     fname_w_extn = ntpath.basename(filename)
 
     fname, fextension = os.path.splitext(fname_w_extn)
 
-    # print(fextension)
-    # print(fname)
+    
     return fname
 
 
