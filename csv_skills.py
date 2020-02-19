@@ -2,8 +2,9 @@
     This script is to convert the list of skills into csv file
 '''
 import pandas as pd
+import os
 
-def make_csv():
+def make_csv(directory):
     Software_Engineering = [
         "C\+\+",
         "J2EE",
@@ -378,8 +379,7 @@ def make_csv():
     )
         
     df=df.transpose()
+
+    print(df.head())
         
-
-    
-
-    return df
+    df.to_csv(os.path.join(directory,'csv_files/Skills_list.csv'))

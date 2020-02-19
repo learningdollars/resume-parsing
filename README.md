@@ -1,6 +1,6 @@
-#vatsaldesai-resume-parsing 
+# Resume-parsing 
 
-vatsaldesai-resume-parsing is a Python script to parse resumes individual or in bulk.
+Resume-parsing is a Python script to parse resumes individual or in bulk.
 
 ## Installation
 
@@ -37,6 +37,23 @@ Following command needs to be issued to run the script with all parameters.
 ```python
 python3 analyze_resume.py -D <directory> -O <True>  -G <google-resumes.txt>
 ```
+# Analyzing the skills 
+
+
+
+## Usage
+
+The script accepts two parameters (both -L and -R are required parameter)
+
+- -L   -  the directory where the text file containing the record of LDTalent database is placed
+- -R   -  the directory where the csv file obtained from resume parser is stored
+
+
+
+```python
+python3 analysing_counts.py -L <directory> -R <directory> 
+```
+
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.

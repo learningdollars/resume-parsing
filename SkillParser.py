@@ -57,19 +57,20 @@ def match_individual_skill(skill_to_match, filetext):
 #function to iterate over all the skills category
 def match_skill_category(directory,filetext):
 
-    
+    print("INSIDE")
     if os.path.isdir(os.path.join(directory,'csv_files')):
         print("csv_files directory exists")
         if os.path.isfile(os.path.join(directory,'csv_files/Skills_list.csv')):
             print("file exists")
         else:
-            csv_df=make_csv()
+            make_csv(directory)
+            print("made_csv")
 
     else:
         os.mkdir(os.path.join(directory,'csv_files'))
-        csv_df=make_csv()
+        make_csv(directory)
 
-    csv_df.to_csv(os.path.join(directory,'csv_files/Skills_list.csv'))
+    
 
 
     
